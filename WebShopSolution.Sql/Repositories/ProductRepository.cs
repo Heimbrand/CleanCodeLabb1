@@ -1,4 +1,5 @@
-﻿using WebShopSolution.Sql.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using WebShopSolution.Sql.Entities;
 using WebShopSolution.Sql.InterfaceRepos;
 
 namespace WebShopSolution.Sql.Repositories;
@@ -26,6 +27,11 @@ public class ProductRepository : IProductRepository
     }
 
     public Task DeleteAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateProductStock(Product product, int quantity)
     {
         throw new NotImplementedException();
     }

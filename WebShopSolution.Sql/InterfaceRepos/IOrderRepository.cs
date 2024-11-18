@@ -3,7 +3,7 @@ using WebShopSolution.Sql.Entities;
 
 namespace WebShopSolution.Sql.InterfaceRepos;
 
-public interface IProductRepository : IRepository<Product, int>
+public interface IOrderRepository : IRepository<Order, int>
 {
-    Task UpdateProductStock(Product product, int quantity);
+    
 }

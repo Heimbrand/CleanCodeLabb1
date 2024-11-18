@@ -1,6 +1,6 @@
 ﻿using WebShopSolution.Shared.Interfaces;
 
-namespace WebShopSolution.Sql.Entities;
+namespace WebShopSolution.Sql.HelperClasses;
 
 public class BaseEntity : IEntity<int>
 {

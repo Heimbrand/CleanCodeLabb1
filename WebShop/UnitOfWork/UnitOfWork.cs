@@ -1,31 +1,39 @@
-﻿using WebShop.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebShop.Models;
 using WebShop.Notifications;
+using WebShopSolution.Sql;
+using WebShopSolution.Sql.Entities;
 using WebShopSolution.Sql.InterfaceRepos;
+using WebShopSolution.Sql.Repositories;
 
 namespace WebShop.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        // Hämta produkter från repository
+        private readonly WebShopDbContext _context;
+        private readonly DbSet<Product> _dbSet;
         public IProductRepository Products { get; private set; }
 
         private readonly ProductSubject _productSubject;
 
         // Konstruktor används för tillfället av Observer pattern
-        public UnitOfWork(ProductSubject productSubject = null)
+        public UnitOfWork(WebShopDbContext context)
         {
-            Products = null;
-
-            // Om inget ProductSubject injiceras, skapa ett nytt
-            _productSubject = productSubject ?? new ProductSubject();
-
-            // Registrera standardobservatörer
-            _productSubject.Attach(new EmailNotification());
+           
         }
 
-        public void NotifyProductAdded(DtoProduct dtoProduct)
+        public void Save()
         {
-            _productSubject.Notify(dtoProduct);
+            throw new NotImplementedException();
+        }
+        public void NotifyProductAdded(Product product)
+        {
+            _productSubject.Notify(product);
+        }
+
+        public void Dispose()
+        {
+            // TODO release managed resources here
         }
     }
 }

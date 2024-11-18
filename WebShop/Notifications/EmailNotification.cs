@@ -1,15 +1,16 @@
 ﻿using WebShop.Models;
+using WebShopSolution.Sql.Entities;
 
 namespace WebShop.Notifications
 {
     // En konkret observatör som skickar e-postmeddelanden
     public class EmailNotification : INotificationObserver
     {
-        public void Update(DtoProduct dtoProduct)
+        public void Update(Product product)
         {
             // Här skulle du implementera logik för att skicka ett e-postmeddelande
             // För enkelhetens skull skriver vi ut till konsolen
-            Console.WriteLine($"Email Notification: New dtoProduct added - {dtoProduct.Name}");
+            Console.WriteLine($"Email Notification: New Product added - {product.Name}");
         }
     }
 }
