@@ -9,12 +9,10 @@ namespace WebShop.UnitOfWork
     public interface IUnitOfWork : IDisposable
     {
         IProductRepository Products { get; }
-        
-        // Sparar förändringar (om du använder en databas)
-        void Save();
-       
-       
-        void NotifyProductAdded(Product dtoProduct); // Notifierar observatörer om ny produkt
+        IOrderRepository Orders { get; }
+        ICustomerRepository Customers { get; }
+
+        int complete();
     }
 }
 

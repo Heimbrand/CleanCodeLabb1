@@ -5,5 +5,5 @@ namespace WebShopSolution.Sql.InterfaceRepos;
 
 public interface ICustomerRepository : IRepository<Customer, int>
 {
-    
+    Task UpdateCustomer(Customer customer);
 }

@@ -5,5 +5,5 @@ namespace WebShopSolution.Sql.InterfaceRepos;
 
 public interface IOrderRepository : IRepository<Order, int>
 {
-    
+    Task UpdateOrder(Order order);
 }

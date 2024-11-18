@@ -15,15 +15,9 @@ builder.Services.AddTransient<INotificationObserver, EmailNotification>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<WebShopDbContext>(options =>
     options.UseSqlServer(connectionString));
-
-
-
-
 
 
 var app = builder.Build();

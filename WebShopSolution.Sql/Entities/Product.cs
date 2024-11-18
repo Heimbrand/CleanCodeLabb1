@@ -6,5 +6,5 @@ public class Product : BaseEntity
 {
     public string Name { get; set; } = default!; 
     public int Quantity { get; set; }
-    public List<Order> Orders { get; set; }
+    
 }

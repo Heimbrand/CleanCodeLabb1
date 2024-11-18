@@ -3,29 +3,10 @@ using WebShopSolution.Sql.InterfaceRepos;
 
 namespace WebShopSolution.Sql.Repositories;
 
-public class OrderRepository : IOrderRepository
+public class OrderRepository : BaseRepository<Order, int, WebShopDbContext>, IOrderRepository
 {
-    public Task<IEnumerable<Order>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Order> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task AddAsync(Order entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateAsync(Order entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
+    public OrderRepository(WebShopDbContext context) : base(context) { }
+    public Task UpdateOrder(Order order)
     {
         throw new NotImplementedException();
     }

@@ -5,5 +5,5 @@ namespace WebShopSolution.Sql.InterfaceRepos;
 
 public interface IProductRepository : IRepository<Product, int>
 {
-    Task UpdateProductStock(Product product, int quantity);
+    Task UpdateProduct(Product product);
 }
