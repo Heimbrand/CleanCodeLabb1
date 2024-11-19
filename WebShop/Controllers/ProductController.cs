@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Models;
+using WebShop.Notifications;
 using WebShop.UnitOfWork;
 using WebShopSolution.Sql.Entities;
 
@@ -14,6 +15,7 @@ namespace WebShop.Controllers
         public ProductController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+          
         }
 
         // Endpoint för att hämta alla produkter
@@ -28,17 +30,18 @@ namespace WebShop.Controllers
         [HttpPost]
         public IActionResult AddProduct([FromBody] Product product)
         {
-           if (product is null)
-               return BadRequest("Product is null");
+            if (product is null)
+                return BadRequest("Product is null");
 
-           try
-           {
+            try
+            {
                 _unitOfWork.Products.AddAsync(product);
-           }
-           catch (Exception e)
-           {
-               return StatusCode(500, $"Internal server error: {e.Message}");
-           }
+                _unitOfWork.complete();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
 
             return Ok();
         }

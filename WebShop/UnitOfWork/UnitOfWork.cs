@@ -14,13 +14,14 @@ namespace WebShop.UnitOfWork
         private readonly DbSet<Product> _productDbset;
         private readonly DbSet<Order> _orderDbset;
         private readonly DbSet<Customer> _customerDbset;
+        private readonly ProductSubject _productSubject;
         public IProductRepository Products { get; private set; }
         public IOrderRepository Orders { get; }
         public ICustomerRepository Customers { get; }
        
 
         // Konstruktor används för tillfället av Observer pattern
-        public UnitOfWork(WebShopDbContext context)
+        public UnitOfWork(WebShopDbContext context) 
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             Products = new ProductRepository(_context);

@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
+using WebShopSolution.Shared.Interfaces;
 using WebShopSolution.Sql.Entities;
 using WebShopSolution.Sql.InterfaceRepos;
 
@@ -6,9 +8,15 @@ namespace WebShopSolution.Sql.Repositories;
 
 public class ProductRepository : BaseRepository<Product, int, WebShopDbContext>, IProductRepository
 {
-    public ProductRepository(WebShopDbContext context) : base(context) { }
-    public Task UpdateProduct(Product product)
+    private readonly WebShopDbContext _context;
+    private readonly DbSet<Product> _entities;
+    public ProductRepository(WebShopDbContext context) : base(context)
     {
-        throw new NotImplementedException();
+        _context = context;
+        _entities = _context.Set<Product>();
+    }
+    public async Task UpdateProduct(Product product)
+    {
+        _entities.Update(product);
     }
 }

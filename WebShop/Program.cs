@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WebShop.Extensions;
 using WebShop.Notifications;
 using WebShop.UnitOfWork;
 using WebShopSolution.Sql;
@@ -34,5 +35,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapProductEndpoints();
 
 app.Run();

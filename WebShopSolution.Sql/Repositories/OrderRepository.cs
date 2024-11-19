@@ -1,13 +1,21 @@
-﻿using WebShopSolution.Sql.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using WebShopSolution.Sql.Entities;
 using WebShopSolution.Sql.InterfaceRepos;
 
 namespace WebShopSolution.Sql.Repositories;
 
 public class OrderRepository : BaseRepository<Order, int, WebShopDbContext>, IOrderRepository
 {
-    public OrderRepository(WebShopDbContext context) : base(context) { }
-    public Task UpdateOrder(Order order)
+    private readonly WebShopDbContext _context;
+    private readonly DbSet<Order> _entities;
+    public OrderRepository(WebShopDbContext context) : base(context)
     {
-        throw new NotImplementedException();
+        _context = context;
+        _entities = _context.Set<Order>();
+    }
+
+    public async Task UpdateOrder(Order order)
+    { 
+        _entities.Update(order);
     }
 }
