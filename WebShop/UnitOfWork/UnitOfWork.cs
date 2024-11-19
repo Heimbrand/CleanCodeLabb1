@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebShop.Models;
 using WebShop.Notifications;
 using WebShopSolution.Sql;
 using WebShopSolution.Sql.Entities;

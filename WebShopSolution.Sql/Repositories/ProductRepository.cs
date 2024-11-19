@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Security.Principal;
-using WebShopSolution.Shared.Interfaces;
 using WebShopSolution.Sql.Entities;
 using WebShopSolution.Sql.InterfaceRepos;
 

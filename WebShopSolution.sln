@@ -9,9 +9,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShopTests", "WebShopTest
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{A15FD9C8-6147-4C2C-82C3-9E017EFAAFAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShopSolution.Sql", "WebShopSolution.Sql\WebShopSolution.Sql.csproj", "{D5FF400F-739B-48B5-BCF9-A1BE0E2476A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShopSolution.Sql", "WebShopSolution.Sql\WebShopSolution.Sql.csproj", "{D5FF400F-739B-48B5-BCF9-A1BE0E2476A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShopSolution.Shared", "WebShopSolution.Shared\WebShopSolution.Shared.csproj", "{1B243CB7-252B-494F-BD4E-F975BA17A092}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShopSolution.Shared", "WebShopSolution.Shared\WebShopSolution.Shared.csproj", "{1B243CB7-252B-494F-BD4E-F975BA17A092}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FE3C3C6F-8AEB-4365-A74E-1408C0B91F6D}"
+	ProjectSection(SolutionItems) = preProject
+		Todo.md = Todo.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

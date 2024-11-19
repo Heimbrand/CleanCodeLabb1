@@ -1,8 +1,3 @@
-using Moq;
-using WebShop.Models;
-using WebShop.Notifications;
-using WebShopSolution.Sql.Entities;
-
 namespace WebShop.Tests
 {
     public class UnitOfWorkTests

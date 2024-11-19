@@ -1,5 +1,4 @@
-﻿using WebShop.Models;
-using WebShopSolution.Sql.Entities;
+﻿using WebShopSolution.Sql.Entities;
 
 namespace WebShop.Notifications
 {

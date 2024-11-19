@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Security.Principal;
 using WebShopSolution.Shared.Interfaces;
 namespace WebShopSolution.Sql.Repositories;
 

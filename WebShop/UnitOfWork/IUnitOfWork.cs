@@ -1,6 +1,4 @@
-﻿using WebShop.Models;
-using WebShopSolution.Sql.Entities;
-using WebShopSolution.Sql.InterfaceRepos;
+﻿using WebShopSolution.Sql.InterfaceRepos;
 
 
 namespace WebShop.UnitOfWork

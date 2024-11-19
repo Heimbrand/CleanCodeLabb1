@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Models;
-using WebShop.Notifications;
 using WebShop.UnitOfWork;
 using WebShopSolution.Sql.Entities;
 

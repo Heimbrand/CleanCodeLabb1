@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
 using Moq;
-using WebShop;
 using WebShop.Controllers;
 using WebShopSolution.Sql.InterfaceRepos;
 
