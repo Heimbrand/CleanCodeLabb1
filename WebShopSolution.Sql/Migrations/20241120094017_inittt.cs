@@ -5,7 +5,7 @@
 namespace WebShopSolution.Sql.Migrations
 {
     /// <inheritdoc />
-    public partial class madeOrderNullableInProduct : Migration
+    public partial class inittt : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

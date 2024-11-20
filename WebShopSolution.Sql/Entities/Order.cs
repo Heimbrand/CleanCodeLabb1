@@ -6,6 +6,6 @@ public class Order : BaseEntity
 {
     public int CustomerId { get; set; }
     public Customer Customer { get; set; } = default!;
-    public List<Product>? Products { get; set; } 
+    public List<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
     public DateTime ShippingDate { get; set; }
 }

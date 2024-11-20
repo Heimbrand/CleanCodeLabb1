@@ -2,9 +2,7 @@
 using WebShopSolution.Shared.Interfaces;
 namespace WebShopSolution.Sql.Repositories;
 
-public class BaseRepository<IEntity, Tid, TContext> : IRepository<IEntity, Tid>
-    where IEntity : class, IEntity<Tid>
-    where TContext : DbContext
+public class BaseRepository<IEntity, Tid, TContext> : IRepository<IEntity, Tid> where IEntity : class, IEntity<Tid> where TContext : DbContext
 {
     private readonly TContext _context;
     private readonly DbSet<IEntity> _entities;

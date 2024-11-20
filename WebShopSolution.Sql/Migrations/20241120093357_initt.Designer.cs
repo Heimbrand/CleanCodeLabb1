@@ -12,8 +12,8 @@ using WebShopSolution.Sql;
 namespace WebShopSolution.Sql.Migrations
 {
     [DbContext(typeof(WebShopDbContext))]
-    [Migration("20241118160141_removedStuffFromProduct")]
-    partial class removedStuffFromProduct
+    [Migration("20241120093357_initt")]
+    partial class initt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,7 +67,7 @@ namespace WebShopSolution.Sql.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("WebShopSolution.Sql.Entities.Product", b =>
+            modelBuilder.Entity("WebShopSolution.Sql.Entities.OrderProduct", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,11 +75,10 @@ namespace WebShopSolution.Sql.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -88,6 +87,29 @@ namespace WebShopSolution.Sql.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderProducts");
+                });
+
+            modelBuilder.Entity("WebShopSolution.Sql.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Products");
                 });
@@ -103,16 +125,33 @@ namespace WebShopSolution.Sql.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("WebShopSolution.Sql.Entities.Product", b =>
+            modelBuilder.Entity("WebShopSolution.Sql.Entities.OrderProduct", b =>
                 {
-                    b.HasOne("WebShopSolution.Sql.Entities.Order", null)
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId");
+                    b.HasOne("WebShopSolution.Sql.Entities.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebShopSolution.Sql.Entities.Product", "Product")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("WebShopSolution.Sql.Entities.Order", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("OrderProducts");
+                });
+
+            modelBuilder.Entity("WebShopSolution.Sql.Entities.Product", b =>
+                {
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }

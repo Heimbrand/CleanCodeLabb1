@@ -12,8 +12,8 @@ using WebShopSolution.Sql;
 namespace WebShopSolution.Sql.Migrations
 {
     [DbContext(typeof(WebShopDbContext))]
-    [Migration("20241118133007_initAddingEntities")]
-    partial class initAddingEntities
+    [Migration("20241120094017_inittt")]
+    partial class inittt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,10 @@ namespace WebShopSolution.Sql.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -63,16 +67,13 @@ namespace WebShopSolution.Sql.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("WebShopSolution.Sql.Entities.OrderItem", b =>
+            modelBuilder.Entity("WebShopSolution.Sql.Entities.OrderProduct", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -85,13 +86,11 @@ namespace WebShopSolution.Sql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("WebShopSolution.Sql.Entities.Product", b =>
@@ -102,12 +101,13 @@ namespace WebShopSolution.Sql.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -117,7 +117,7 @@ namespace WebShopSolution.Sql.Migrations
             modelBuilder.Entity("WebShopSolution.Sql.Entities.Order", b =>
                 {
                     b.HasOne("WebShopSolution.Sql.Entities.Customer", "Customer")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -125,20 +125,16 @@ namespace WebShopSolution.Sql.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("WebShopSolution.Sql.Entities.OrderItem", b =>
+            modelBuilder.Entity("WebShopSolution.Sql.Entities.OrderProduct", b =>
                 {
-                    b.HasOne("WebShopSolution.Sql.Entities.Customer", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("CustomerId");
-
                     b.HasOne("WebShopSolution.Sql.Entities.Order", "Order")
-                        .WithMany("OrderItems")
+                        .WithMany("OrderProducts")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebShopSolution.Sql.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -148,16 +144,14 @@ namespace WebShopSolution.Sql.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WebShopSolution.Sql.Entities.Customer", b =>
-                {
-                    b.Navigation("OrderItems");
-
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("WebShopSolution.Sql.Entities.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("OrderProducts");
+                });
+
+            modelBuilder.Entity("WebShopSolution.Sql.Entities.Product", b =>
+                {
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }
