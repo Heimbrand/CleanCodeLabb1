@@ -7,9 +7,7 @@ using WebShopSolution.Sql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddControllers(); // Sparar för att behålla de inbyggda tjänsterna
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<INotificationObserver, EmailNotification>();
 builder.Services.AddEndpointsApiExplorer();
@@ -21,7 +19,7 @@ builder.Services.AddDbContext<WebShopDbContext>(options =>
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
-    options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve; // Lägger till referenser för att undvika att serialisera samma objekt flera gånger
 });
 
 var app = builder.Build();
@@ -30,10 +28,9 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthorization();
-app.MapControllers();
-#region Minimal api
+
 app.MapProductEndpoints();
 app.MapCustomerEndpoints();
 app.MapOrderEndpoints();
-#endregion
+
 app.Run();
