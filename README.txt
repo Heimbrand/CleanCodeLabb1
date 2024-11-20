@@ -1,8 +1,4 @@
-## Hello!👋 This repo showcases Clean code, SOLID and TDD!
----
-
-
-
+Hello!👋 This repo showcases Clean code, SOLID and TDD!
 
 
 docker build -t webshop .
