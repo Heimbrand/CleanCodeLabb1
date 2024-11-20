@@ -27,7 +27,7 @@ namespace WebShop.UnitOfWork
             Orders = new OrderRepository(_context);
             Customers = new CustomerRepository(_context);
         }
-        public int complete()
+        public int CommitAsync()
         {
            return _context.SaveChanges();
         }

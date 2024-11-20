@@ -6,7 +6,6 @@ namespace WebShop.Extensions;
 
 public static class ProductEndpointExtensions
 {
-
     public static IEndpointRouteBuilder MapProductEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("api/products");
@@ -20,7 +19,7 @@ public static class ProductEndpointExtensions
     }
 
     #region Api methods
-    private static async Task<IResult> GetAllProducts([FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> GetAllProducts([FromServices] IUnitOfWork unitOfWork)
     {
         try
         {
@@ -33,7 +32,7 @@ public static class ProductEndpointExtensions
         }
 
     }
-    private static async Task<IResult> GetProductById([FromServices] IUnitOfWork unitOfWork, int id)
+    public static async Task<IResult> GetProductById([FromServices] IUnitOfWork unitOfWork, int id)
     {
         try
         {
@@ -46,7 +45,7 @@ public static class ProductEndpointExtensions
             throw;
         }
     }
-    private static async Task<IResult> AddProduct([FromBody] Product product, [FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> AddProduct([FromBody] Product product, [FromServices] IUnitOfWork unitOfWork)
     {
         if (product is null)
             return Results.BadRequest("Product is null");
@@ -54,7 +53,7 @@ public static class ProductEndpointExtensions
         try
         {
             await unitOfWork.Products.AddAsync(product);
-            unitOfWork.complete();
+            unitOfWork.CommitAsync();
         }
         catch (Exception e)
         {
@@ -63,7 +62,7 @@ public static class ProductEndpointExtensions
 
         return Results.Ok();
     }
-    private static async Task<IResult> UpdateProduct([FromBody] Product product, [FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> UpdateProduct([FromBody] Product product, [FromServices] IUnitOfWork unitOfWork)
     {
         if (product is null)
             return Results.BadRequest("Product is null");
@@ -71,7 +70,7 @@ public static class ProductEndpointExtensions
         try
         {
             await unitOfWork.Products.UpdateProduct(product);
-            unitOfWork.complete();
+            unitOfWork.CommitAsync();
         }
         catch (Exception e)
         {
@@ -80,12 +79,12 @@ public static class ProductEndpointExtensions
 
         return Results.Ok();
     }
-    private static async Task<IResult> DeleteProduct([FromServices] IUnitOfWork unitOfWork, int id)
+    public static async Task<IResult> DeleteProduct([FromServices] IUnitOfWork unitOfWork, int id)
     {
         try
         {
             await unitOfWork.Products.DeleteAsync(id);
-            unitOfWork.complete();
+            unitOfWork.CommitAsync();
         }
         catch (Exception e)
         {

@@ -19,7 +19,7 @@ public static class CustomerEndpointExtensions
     }
 
     #region Api methods
-    private static async Task<IResult> GetAllCustomers([FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> GetAllCustomers([FromServices] IUnitOfWork unitOfWork)
     {
         try
         {
@@ -31,7 +31,7 @@ public static class CustomerEndpointExtensions
             return Results.Problem($"Exception: {e.Message}");
         }
     }
-    private static async Task<IResult> GetCustomerById([FromServices] IUnitOfWork unitOfWork, int id)
+    public static async Task<IResult> GetCustomerById([FromServices] IUnitOfWork unitOfWork, int id)
     {
         try
         {
@@ -43,14 +43,14 @@ public static class CustomerEndpointExtensions
             return Results.Problem($"Exception: {e.Message}");
         }
     }
-    private static async Task<IResult> AddCustomer([FromBody] Customer customer, [FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> AddCustomer([FromBody] Customer customer, [FromServices] IUnitOfWork unitOfWork)
     {
         if (customer is null)
             return Results.BadRequest("Customer is null");
         try
         {
             await unitOfWork.Customers.AddAsync(customer);
-            unitOfWork.complete();
+            unitOfWork.CommitAsync();
         }
         catch (Exception e)
         {
@@ -58,14 +58,14 @@ public static class CustomerEndpointExtensions
         }
         return Results.Created($"/api/customers/{customer.Id}", customer);
     }
-    private static async Task<IResult> UpdateCustomer([FromBody] Customer customer, [FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> UpdateCustomer([FromBody] Customer customer, [FromServices] IUnitOfWork unitOfWork)
     {
         if (customer is null)
             return Results.BadRequest("Customer is null");
         try
         {
             await unitOfWork.Customers.UpdateCustomer(customer);
-            unitOfWork.complete();
+            unitOfWork.CommitAsync();
         }
         catch (Exception e)
         {
@@ -73,15 +73,12 @@ public static class CustomerEndpointExtensions
         }
         return Results.Ok();
     }
-    private static async Task<IResult> DeleteCustomer([FromServices] IUnitOfWork unitOfWork, int id)
+    public static async Task<IResult> DeleteCustomer([FromServices] IUnitOfWork unitOfWork, int id)
     {
         try
         {
-            var customer = await unitOfWork.Customers.GetByIdAsync(id);
-            if (customer is null)
-                return Results.NotFound();
-            await unitOfWork.Customers.DeleteAsync(customer.Id);
-            unitOfWork.complete();
+            await unitOfWork.Customers.DeleteAsync(id);
+            unitOfWork.CommitAsync();
         }
         catch (Exception e)
         {

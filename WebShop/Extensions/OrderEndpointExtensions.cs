@@ -19,7 +19,7 @@ public static class OrderEndpointExtensions
     }
 
     #region Api methods
-    private static async Task<IResult> GetAllOrders([FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> GetAllOrders([FromServices] IUnitOfWork unitOfWork)
     {
         try
         {
@@ -31,7 +31,7 @@ public static class OrderEndpointExtensions
             return Results.Problem($"Exception: {e.Message}");
         }
     }
-    private static async Task<IResult> GetOrderById([FromServices] IUnitOfWork unitOfWork, int id)
+    public static async Task<IResult> GetOrderById([FromServices] IUnitOfWork unitOfWork, int id)
     {
         try
         {
@@ -40,10 +40,10 @@ public static class OrderEndpointExtensions
         }
         catch (Exception e)
         {
-           return Results.Problem($"Exception: {e.Message}");
+            return Results.Problem($"Exception: {e.Message}");
         }
     }
-    private static async Task<IResult> AddOrder([FromBody] Order order, [FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> AddOrder([FromBody] Order order, [FromServices] IUnitOfWork unitOfWork)
     {
         if (order is null)
             return Results.BadRequest("Order is null");
@@ -72,7 +72,7 @@ public static class OrderEndpointExtensions
 
             order.ShippingDate = DateTime.UtcNow.Date;
             await unitOfWork.Orders.AddAsync(order);
-            unitOfWork.complete();
+            unitOfWork.CommitAsync();
         }
         catch (Exception e)
         {
@@ -80,14 +80,14 @@ public static class OrderEndpointExtensions
         }
         return Results.Ok(order);
     }
-    private static async Task<IResult> UpdateOrder([FromBody] Order order, [FromServices] IUnitOfWork unitOfWork)
+    public static async Task<IResult> UpdateOrder([FromBody] Order order, [FromServices] IUnitOfWork unitOfWork)
     {
         if (order is null)
             return Results.BadRequest("Order is null");
         try
         {
             await unitOfWork.Orders.UpdateOrder(order);
-            unitOfWork.complete();
+            unitOfWork.CommitAsync();
         }
         catch (Exception e)
         {
@@ -95,7 +95,7 @@ public static class OrderEndpointExtensions
         }
         return Results.Ok();
     }
-    private static async Task<IResult> DeleteOrder([FromServices] IUnitOfWork unitOfWork, int id)
+    public static async Task<IResult> DeleteOrder([FromServices] IUnitOfWork unitOfWork, int id)
     {
         try
         {
@@ -103,7 +103,7 @@ public static class OrderEndpointExtensions
             if (order is null)
                 return Results.NotFound();
             await unitOfWork.Orders.DeleteAsync(order.Id);
-            unitOfWork.complete();
+            unitOfWork.CommitAsync();
             return Results.Ok();
         }
         catch (Exception e)

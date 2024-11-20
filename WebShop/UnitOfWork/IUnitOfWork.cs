@@ -10,7 +10,7 @@ namespace WebShop.UnitOfWork
         IOrderRepository Orders { get; }
         ICustomerRepository Customers { get; }
 
-        int complete();
+        int CommitAsync();
     }
 }
 

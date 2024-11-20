@@ -1,6 +1,6 @@
 # Todo
 
-* Make xUnit tests for the extensions
+* Make xUnit tests for OrderEndpointExtensions
 ---
 * Look into INotificationObserver
 * Look into EmailNotification
