@@ -93,16 +93,13 @@ public static class OrderEndpointExtensions
         {
             return Results.Problem($"Exception: {e.Message}");
         }
-        return Results.Ok();
+        return Results.Ok(order);
     }
     public static async Task<IResult> DeleteOrder([FromServices] IUnitOfWork unitOfWork, int id)
     {
         try
-        {
-            var order = await unitOfWork.Orders.GetByIdAsync(id);
-            if (order is null)
-                return Results.NotFound();
-            await unitOfWork.Orders.DeleteAsync(order.Id);
+        { 
+            await unitOfWork.Orders.DeleteAsync(id);
             unitOfWork.CommitAsync();
             return Results.Ok();
         }
