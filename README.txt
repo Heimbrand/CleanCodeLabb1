@@ -1,7 +1,5 @@
-### About
-
-# A repo showcasing Clean Code, SOLID principles and TDD with xUnit
-
+## Hello!👋 This repo showcases Clean code, SOLID and TDD!
+---
 
 
 
