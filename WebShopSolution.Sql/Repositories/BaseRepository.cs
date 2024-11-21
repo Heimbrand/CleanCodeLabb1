@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebShopSolution.Shared.Interfaces;
-namespace WebShopSolution.Sql.Repositories;
+namespace WebShopSolution.Sql.Repositories.BaseRepoTests;
 
 public class BaseRepository<IEntity, Tid, TContext> : IRepository<IEntity, Tid> where IEntity : class, IEntity<Tid> where TContext : DbContext
 {
@@ -22,7 +22,7 @@ public class BaseRepository<IEntity, Tid, TContext> : IRepository<IEntity, Tid> 
     }
     public async Task AddAsync(IEntity entity)
     {
-         await _entities.AddAsync(entity);
+        await _entities.AddAsync(entity);
     }
     public async Task DeleteAsync(Tid id)
     {

@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(); // Sparar för att behålla de inbyggda tjänsterna
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddTransient<INotificationObserver, EmailNotification>();
+builder.Services.AddTransient<INotificationObserver, NotificationStrategyPattern>();
+builder.Services.AddTransient<NotificationStrategy>();
+builder.Services.AddSingleton<ProductSubject>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -32,5 +34,9 @@ app.UseAuthorization();
 app.MapProductEndpoints();
 app.MapCustomerEndpoints();
 app.MapOrderEndpoints();
+
+var productSubject = app.Services.GetRequiredService<ProductSubject>();
+var emailNotification = app.Services.GetRequiredService<INotificationObserver>();
+productSubject.Attach(emailNotification);
 
 app.Run();

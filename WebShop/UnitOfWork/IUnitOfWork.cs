@@ -1,4 +1,6 @@
-﻿using WebShopSolution.Sql.InterfaceRepos;
+﻿using WebShop.Notifications;
+using WebShopSolution.Sql.Entities;
+using WebShopSolution.Sql.InterfaceRepos;
 
 
 namespace WebShop.UnitOfWork
@@ -10,6 +12,9 @@ namespace WebShop.UnitOfWork
         IOrderRepository Orders { get; }
         ICustomerRepository Customers { get; }
 
+        void AttachObserver(INotificationObserver observer);
+        void DetachObserver(INotificationObserver observer);
+        void NotifyObserver(Product product);
         int CommitAsync();
     }
 }

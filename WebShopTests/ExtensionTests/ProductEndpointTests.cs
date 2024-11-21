@@ -1,10 +1,7 @@
 ﻿using WebShop.Extensions;
 using WebShopSolution.Sql.Entities;
-using WebShopSolution.Sql.InterfaceRepos;
 using FakeItEasy;
-using Microsoft.AspNetCore.Routing;
 using WebShop.UnitOfWork;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace WebShopTests.ExtensionTests;

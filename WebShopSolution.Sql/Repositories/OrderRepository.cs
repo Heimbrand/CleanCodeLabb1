@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebShopSolution.Sql.Entities;
 using WebShopSolution.Sql.InterfaceRepos;
+using WebShopSolution.Sql.Repositories.BaseRepoTests;
 
 namespace WebShopSolution.Sql.Repositories;
 

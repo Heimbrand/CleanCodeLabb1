@@ -53,6 +53,7 @@ public static class ProductEndpointExtensions
         try
         {
             await unitOfWork.Products.AddAsync(product);
+            unitOfWork.NotifyObserver(product);
             unitOfWork.CommitAsync();
         }
         catch (Exception e)
@@ -70,6 +71,7 @@ public static class ProductEndpointExtensions
         try
         {
             await unitOfWork.Products.UpdateProduct(product);
+            unitOfWork.NotifyObserver(product);
             unitOfWork.CommitAsync();
         }
         catch (Exception e)
