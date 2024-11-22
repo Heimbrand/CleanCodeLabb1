@@ -1,29 +1,58 @@
-namespace WebShopTests.DesignPatternTests
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using WebShop.Notifications;
+using WebShop.UnitOfWork;
+using WebShopSolution.Sql;
+using WebShopSolution.Sql.Entities;
+
+public class UnitOfWorkTests
 {
-    public class UnitOfWorkTests
+    private readonly Mock<INotificationObserver> _observerMock;
+    private readonly ProductSubject _productSubject;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public UnitOfWorkTests()
     {
-        //[Fact]
-        //public void NotifyProductAdded_CallsObserverUpdate() 
-        //{
-        //    // Arrange
-        //    var product = new Product() { Id = 1, Name = "Test" };
+        _observerMock = new Mock<INotificationObserver>();
+        _productSubject = new ProductSubject();
+        var dummyContext = new Mock<WebShopDbContext>(new DbContextOptions<WebShopDbContext>()).Object;
+        _unitOfWork = new UnitOfWork(dummyContext, _productSubject);
+    }
+    [Fact]
+    public void NotifyProductAdded_CallsObserverUpdate()
+    {
+        // Arrange
+        var product = new Product {Id = 1, Name = "TestarObserver", Description = "OchStrategy"};
 
-        //    // Skapar en mock av INotificationObserver
-        //    var mockObserver = new Mock<INotificationObserver>();
+        _unitOfWork.AttachObserver(_observerMock.Object);
 
-        //    // Skapar en instans av ProductSubject och lägger till mock-observatören
-        //    var productSubject = new ProductSubject();
-        //    productSubject.Attach(mockObserver.Object);
+        // Act
 
-        //    // Injicerar vårt eget ProductSubject i UnitOfWork
-        //    var unitOfWork = new UnitOfWork.UnitOfWork(productSubject);
+        _unitOfWork.NotifyObserver(product);
 
-        //    // Act
-        //    unitOfWork.NotifyProductAdded(product);
+        // Assert
 
-        //    // Assert
-        //    // Verifierar att Update-metoden kallades på vår mock-observatör
-        //    mockObserver.Verify(o => o.Update(product), Times.Once);
-        //}
+        _observerMock.Verify(o => o.Update(product), Times.Once);
+    }
+    [Fact]
+    public void AttachObserver_CallsAttachOnProductSubject()
+    {
+        // Arrange
+        _unitOfWork.AttachObserver(_observerMock.Object);
+
+        // Act & Assert
+        _unitOfWork.NotifyObserver(new Product { Id = 1, Name = "test", Description = "test" });
+        _observerMock.Verify(o => o.Update(It.IsAny<Product>()), Times.Once);
+    }
+    [Fact]
+    public void DetachObserver_CallsDetachOnProductSubject()
+    {
+        // Arrange
+        _unitOfWork.AttachObserver(_observerMock.Object);
+        _unitOfWork.DetachObserver(_observerMock.Object);
+        // Act & Assert
+        _productSubject.Notify(new Product { Id = 1, Name = "test", Description = "test" });
+        _observerMock.Verify(o => o.Update(It.IsAny<Product>()), Times.Never);
     }
 }
+

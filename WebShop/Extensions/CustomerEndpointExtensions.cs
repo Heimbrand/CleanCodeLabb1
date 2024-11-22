@@ -8,7 +8,7 @@ public static class CustomerEndpointExtensions
 {
     public static IEndpointRouteBuilder MapCustomerEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/customers");
+        var group = app.MapGroup("api/customers").WithDisplayName("Customer Endpoints: Minimal Api");
         group.MapGet("", GetAllCustomers);
         group.MapGet("{id}", GetCustomerById);
         group.MapPost("", AddCustomer);

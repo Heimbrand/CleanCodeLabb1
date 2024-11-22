@@ -1,28 +1,26 @@
 ﻿using WebShopSolution.Sql.Entities;
 
-namespace WebShop.Notifications
+public class ProductSubject
 {
-    public class ProductSubject 
+    private readonly List<INotificationObserver> _observers = new();
+
+    public void Attach(INotificationObserver observer)
     {
-        private readonly List<INotificationObserver> _observers = new();
 
-        public void Attach(INotificationObserver observer)
-        {
-            
-            _observers.Add(observer);
-        }
-        public void Detach(INotificationObserver observer)
-        {
-           
-            _observers.Remove(observer);
-        }
-        public void Notify(Product product)
+        _observers.Add(observer);
+    }
+    public void Detach(INotificationObserver observer)
+    {
 
+        _observers.Remove(observer);
+    }
+    public void Notify(Product product)
+
+    {
+        foreach (var observer in _observers)
         {
-            foreach (var observer in _observers)
-            {
-                observer.Update(product);
-            }
+            observer.Update(product);
         }
     }
 }
+

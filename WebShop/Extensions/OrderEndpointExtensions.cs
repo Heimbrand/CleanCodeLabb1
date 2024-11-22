@@ -8,7 +8,7 @@ public static class OrderEndpointExtensions
 {
     public static IEndpointRouteBuilder MapOrderEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/orders");
+        var group = app.MapGroup("api/orders").WithDisplayName("Order Endpoints: Minimal Api");
         group.MapGet("", GetAllOrders);
         group.MapGet("{id}", GetOrderById);
         group.MapPost("", AddOrder);

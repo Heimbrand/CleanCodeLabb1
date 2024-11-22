@@ -8,7 +8,7 @@ public static class ProductEndpointExtensions
 {
     public static IEndpointRouteBuilder MapProductEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/products");
+        var group = app.MapGroup("api/products").WithDisplayName("Product Endpoints: Minimal Api");
         group.MapGet("", GetAllProducts);
         group.MapGet("{id}", GetProductById);
         group.MapPost("", AddProduct);

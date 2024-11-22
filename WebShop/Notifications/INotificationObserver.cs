@@ -1,10 +1,7 @@
 ﻿using WebShopSolution.Sql.Entities;
 
-namespace WebShop.Notifications
+public interface INotificationObserver
 {
-
-    public interface INotificationObserver
-    {
-        void Update(Product product);
-    }
+    void Update(Product product);
 }
+

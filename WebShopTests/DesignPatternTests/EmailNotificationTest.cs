@@ -1,6 +1,6 @@
 ﻿namespace WebShopTests.DesignPatternTests;
 
-public class NotificationStrategyPatternTest
+public class EmailNotificationTest
 {
 
 }
