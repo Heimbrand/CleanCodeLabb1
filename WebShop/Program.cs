@@ -23,13 +23,14 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+//TODO: Du får kolla om din LocalHost connectionstring är samma som min, annars får du ändra i appsettings.json.
+var connectionString = builder.Configuration.GetConnectionString("LocalHostConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<WebShopDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
-    options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve; // Lägger till referenser för att undvika att serialisera samma objekt flera gånger
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve; // För att undvika reference loop
 });
 
 var app = builder.Build();

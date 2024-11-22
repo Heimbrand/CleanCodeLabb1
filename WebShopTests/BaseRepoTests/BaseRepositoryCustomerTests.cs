@@ -18,15 +18,16 @@ public class BaseRepositoryCustomerTests
         _context = new WebShopDbContext(options);
         BaseRepository = new BaseRepository<Customer, int, WebShopDbContext>(_context);
     }
+
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllEntities()
     {
         // Arrange
         var customers = new List<Customer>
         {
-            new() {Name = "Kalle", Email = "Kalle.Anka@Hotmail.se" },
-            new() {Name = "Staffan", Email = "Staffan.Stalledräng@Hotmail.se" },
-            new() {Name = "Donald", Email = "Donald.Trump@Hotmail.se" },
+            new() { Name = "Kalle", Email = "Kalle.Anka@Hotmail.se" },
+            new() { Name = "Staffan", Email = "Staffan.Stalledräng@Hotmail.se" },
+            new() { Name = "Donald", Email = "Donald.Trump@Hotmail.se" },
         };
         await _context.Set<Customer>().AddRangeAsync(customers);
         await _context.SaveChangesAsync();
@@ -37,12 +38,13 @@ public class BaseRepositoryCustomerTests
         // Assert
         Assert.Equal(customers, result);
     }
+
     [Fact]
     public async Task GetByIdAsync_ShouldReturnEntity()
     {
         // Arrange
-        var customer = new Customer() {Name = "Pelle", Email = "Pelle.Pellesson@Hotmail.se" };
-        
+        var customer = new Customer() { Name = "Pelle", Email = "Pelle.Pellesson@Hotmail.se" };
+
         await _context.Set<Customer>().AddAsync(customer);
         await _context.SaveChangesAsync();
 
@@ -52,6 +54,7 @@ public class BaseRepositoryCustomerTests
         // Assert
         Assert.Equal(customer, result);
     }
+
     [Fact]
     public async Task AddAsync_ShouldAddEntity()
     {
@@ -66,6 +69,7 @@ public class BaseRepositoryCustomerTests
         var addedCustomer = await _context.Customers.FindAsync(customer.Id);
         Assert.Equal(customer, addedCustomer);
     }
+
     [Fact]
     public async Task DeleteAsync_ShouldDeleteEntity()
     {

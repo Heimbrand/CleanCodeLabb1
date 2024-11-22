@@ -7,18 +7,18 @@ using WebShopSolution.Sql.Repositories;
 
 namespace WebShopTests.RepositoryTests;
 
-public class RepositoryTests
+public class ProductRepositoryTests
 {
     private readonly IProductRepository _productRepository;
     private readonly Mock<WebShopDbContext> _mockContext;
     private readonly Mock<DbSet<Product>> _mockDbSet;
 
-    public RepositoryTests()
+    public ProductRepositoryTests()
     {
         _mockDbSet = new Mock<DbSet<Product>>();
         _mockContext = new Mock<WebShopDbContext>(new DbContextOptions<WebShopDbContext>());
         _mockContext.Setup(m => m.Set<Product>()).Returns(_mockDbSet.Object);
-        _productRepository = new Repository(_mockContext.Object);
+        _productRepository = new ProductRepository(_mockContext.Object);
     }
     [Fact]
     public async Task UpdateProduct_ShouldSucceed()

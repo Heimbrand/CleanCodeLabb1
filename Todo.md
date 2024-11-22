@@ -1,7 +1,3 @@
 # Todo
 
-
-* xUnit test ObserverPattern
-* xUnit test StrategyPattern
-* xUnit test UnitOfWork
- 
+* Se om jag kan få ut fler tester.
