@@ -13,12 +13,9 @@ public class ProductEndpointTests
     {
         // Arrange
         var fakeUnitOfWork = A.Fake<IUnitOfWork>();
-        var fakeProduct = new List<Product>
-        {
-            new Product { Id = 1, Name = "Snus", Description = "Nikotin"},
-            new Product { Id = 2, Name = "Pizza", Description = "Mat"}
-        };
-        A.CallTo(() => fakeUnitOfWork.Products.GetAllAsync()).Returns(Task.FromResult(fakeProduct.AsEnumerable()));
+        var fakeProductCollection = A.CollectionOfDummy<Product>(4);
+       
+        A.CallTo(() => fakeUnitOfWork.Products.GetAllAsync()).Returns(Task.FromResult(fakeProductCollection.AsEnumerable()));
 
         // Act
         var result = await ProductEndpointExtensions.GetAllProducts(fakeUnitOfWork);
@@ -26,7 +23,7 @@ public class ProductEndpointTests
         // Assert
         var okResult = Assert.IsType<Ok<IEnumerable<Product>>>(result);
         var returnValue = Assert.IsAssignableFrom<IEnumerable<Product>>(okResult.Value);
-        Assert.Equal(2, returnValue.Count());
+        Assert.Equal(4, returnValue.Count());
     }
     [Fact]
     public async Task GetProductById_ShouldReturnProductById()

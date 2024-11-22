@@ -5,7 +5,7 @@ using WebShopSolution.Sql.Entities;
 using WebShopSolution.Sql.InterfaceRepos;
 using WebShopSolution.Sql.Repositories;
 
-public class UnitOfWork : IUnitOfWork, IDisposable
+public class UnitOfWork : IUnitOfWork
 {
     private readonly WebShopDbContext _context;
     private readonly ProductSubject _productSubject;
