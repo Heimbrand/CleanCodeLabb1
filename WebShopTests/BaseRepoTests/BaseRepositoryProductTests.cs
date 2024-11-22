@@ -1,26 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebShopSolution.Shared.Interfaces;
-using WebShopSolution.Sql;
 using WebShopSolution.Sql.Entities;
 using WebShopSolution.Sql.Repositories.BaseRepoTests;
-using Xunit;
+using WebShopSolution.Sql;
 
 namespace WebShopTests.BaseRepoTests;
 
-public abstract class BaseRepositoryTests // Denna klassen testar BasRepots metoder, fast med ett bestämt objekt. fick inte det generiska att funka
+public class BaseRepositoryProductTests
 {
-    public BaseRepository<Product, int, WebShopDbContext> _baseRepository;
+    public BaseRepository<Product, int, WebShopDbContext> BaseRepository;
     public WebShopDbContext _context;
 
-    public BaseRepositoryTests()
+    public BaseRepositoryProductTests()
     {
         var options = new DbContextOptionsBuilder<WebShopDbContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")
             .Options;
         _context = new WebShopDbContext(options);
-        _baseRepository = new BaseRepository<Product, int, WebShopDbContext>(_context);
+        BaseRepository = new BaseRepository<Product, int, WebShopDbContext>(_context);
     }
-
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllEntities()
     {
@@ -34,29 +31,26 @@ public abstract class BaseRepositoryTests // Denna klassen testar BasRepots meto
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _baseRepository.GetAllAsync();
+        var result = await BaseRepository.GetAllAsync();
 
         // Assert
         Assert.Equal(products, result);
     }
-
     [Fact]
     public async Task GetByIdAsync_ShouldReturnEntity()
     {
         // Arrange
         var product = new Product { Name = "Product", Description = "Description" };
-        var idProperty = typeof(Product).GetProperty("Id");
-        idProperty.SetValue(product, 1);
+
         await _context.Set<Product>().AddAsync(product);
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _baseRepository.GetByIdAsync((int)idProperty.GetValue(product));
+        var result = await BaseRepository.GetByIdAsync(product.Id);
 
         // Assert
         Assert.Equal(product, result);
     }
-
     [Fact]
     public async Task AddAsync_ShouldAddEntity()
     {
@@ -68,30 +62,28 @@ public abstract class BaseRepositoryTests // Denna klassen testar BasRepots meto
         };
 
         // Act
-        await _baseRepository.AddAsync(product);
+        await BaseRepository.AddAsync(product);
         await _context.SaveChangesAsync();
 
         // Assert
         var addedProduct = await _context.Products.FindAsync(product.Id);
         Assert.Equal(product, addedProduct);
     }
-
     [Fact]
     public async Task DeleteAsync_ShouldDeleteEntity()
     {
         // Arrange
         var product = new Product { Name = "Product", Description = "Description" };
-        var idProperty = typeof(Product).GetProperty("Id");
-        idProperty.SetValue(product, 1);
+
         await _context.Set<Product>().AddAsync(product);
         await _context.SaveChangesAsync();
 
         // Act
-        await _baseRepository.DeleteAsync((int)idProperty.GetValue(product));
+        await BaseRepository.DeleteAsync(product.Id);
         await _context.SaveChangesAsync();
 
         // Assert
-        var deletedProduct = await _context.Set<Product>().FindAsync((int)idProperty.GetValue(product));
+        var deletedProduct = await _context.Set<Product>().FindAsync(product.Id);
         Assert.Null(deletedProduct);
     }
 }

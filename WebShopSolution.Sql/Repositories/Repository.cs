@@ -5,11 +5,11 @@ using WebShopSolution.Sql.Repositories.BaseRepoTests;
 
 namespace WebShopSolution.Sql.Repositories;
 
-public class ProductRepository : BaseRepository<Product, int, WebShopDbContext>, IProductRepository
+public class Repository : BaseRepository<Product, int, WebShopDbContext>, IProductRepository
 {
     private readonly WebShopDbContext _context;
     private readonly DbSet<Product> _entities;
-    public ProductRepository(WebShopDbContext context) : base(context)
+    public Repository(WebShopDbContext context) : base(context)
     {
         _context = context;
         _entities = _context.Set<Product>();

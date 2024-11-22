@@ -17,7 +17,7 @@ namespace WebShop.UnitOfWork
         public UnitOfWork(WebShopDbContext context, ProductSubject productSubject)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            Products = new ProductRepository(_context);
+            Products = new Repository(_context);
             Orders = new OrderRepository(_context);
             Customers = new CustomerRepository(_context);
             _productSubject = productSubject ?? throw new ArgumentNullException(nameof(productSubject));
