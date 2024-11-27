@@ -36,7 +36,7 @@ public static class OrderEndpointExtensions
         try
         {
             var order = await unitOfWork.Orders.GetByIdAsync(id);
-            return order is null ? Results.NotFound($"Order with the id: {id} does not exist") : Results.Ok(order);
+            return order is null ? Results.NotFound() : Results.Ok(order);
         }
         catch (Exception e)
         {
@@ -46,14 +46,14 @@ public static class OrderEndpointExtensions
     public static async Task<IResult> AddOrder([FromBody] Order order, [FromServices] IUnitOfWork unitOfWork)
     {
         if (order is null)
-            return Results.BadRequest("Order is null");
+            return Results.BadRequest();
 
         try
         {
             var existingCustomer = await unitOfWork.Customers.GetByIdAsync(order.CustomerId);
 
             if (existingCustomer is null)
-                return Results.BadRequest("Customer does not exist");
+                return Results.BadRequest();
 
             order.Customer = existingCustomer;
 
@@ -64,10 +64,14 @@ public static class OrderEndpointExtensions
                     var existingProduct = await unitOfWork.Products.GetByIdAsync(orderProduct.ProductId);
 
                     if (existingProduct is null)
-                        return Results.BadRequest("Product does not exist");
+                        return Results.BadRequest();
 
                     orderProduct.Product = existingProduct;
                 }
+            }
+            else
+            {
+                return Results.BadRequest();
             }
 
             order.ShippingDate = DateTime.UtcNow.Date;
@@ -83,7 +87,12 @@ public static class OrderEndpointExtensions
     public static async Task<IResult> UpdateOrder([FromBody] Order order, [FromServices] IUnitOfWork unitOfWork)
     {
         if (order is null)
-            return Results.BadRequest("Order is null");
+            return Results.BadRequest();
+
+        var existingOrder = await unitOfWork.Orders.GetByIdAsync(order.Id);
+        if (existingOrder is null)
+            return Results.BadRequest();
+
         try
         {
             await unitOfWork.Orders.UpdateOrder(order);
@@ -97,6 +106,12 @@ public static class OrderEndpointExtensions
     }
     public static async Task<IResult> DeleteOrder([FromServices] IUnitOfWork unitOfWork, int id)
     {
+        if (id <= 0)
+            return Results.BadRequest();
+        var order = await unitOfWork.Orders.GetByIdAsync(id);
+        if (order is null)
+            return Results.BadRequest();
+
         try
         { 
             await unitOfWork.Orders.DeleteAsync(id);

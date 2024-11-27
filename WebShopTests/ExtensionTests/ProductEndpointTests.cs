@@ -26,6 +26,19 @@ public class ProductEndpointTests
         Assert.Equal(4, returnValue.Count());
     }
     [Fact]
+    public async Task GetAllProducts_ShouldReturnNotFound()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        A.CallTo(() => fakeUnitOfWork.Products.GetAllAsync()).Returns(Task.FromResult<IEnumerable<Product>>(null));
+
+        // Act
+        var result = await ProductEndpointExtensions.GetAllProducts(fakeUnitOfWork);
+
+        // Assert
+        Assert.IsType<NotFound>(result);
+    }
+    [Fact]
     public async Task GetProductById_ShouldReturnProductById()
     {
         // Arrange
@@ -44,6 +57,17 @@ public class ProductEndpointTests
         Assert.Equal(1, returnValue.Id);
     }
     [Fact]
+    public async Task GetProductById_ShouldReturnNotFound()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        A.CallTo(() => fakeUnitOfWork.Products.GetByIdAsync(1)).Returns(Task.FromResult<Product>(null));
+        // Act
+        var result = await ProductEndpointExtensions.GetProductById(fakeUnitOfWork, 1);
+        // Assert
+        Assert.IsType<NotFound>(result);
+    }
+    [Fact]
     public async Task AddProduct_ShouldAddProduct()
     {
         // Arrange
@@ -54,6 +78,16 @@ public class ProductEndpointTests
         // Assert
         A.CallTo(() => fakeUnitOfWork.Products.AddAsync(fakeProduct)).MustHaveHappened();
         A.CallTo(() => fakeUnitOfWork.CommitAsync()).MustHaveHappened();
+    }
+    [Fact]
+    public async Task AddProduct_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        // Act
+        var result = await ProductEndpointExtensions.AddProduct(null, fakeUnitOfWork);
+        // Assert
+        Assert.IsType<BadRequest>(result);
     }
     [Fact]
     public async Task UpdateProduct_ShouldUpdateProduct()
@@ -68,6 +102,16 @@ public class ProductEndpointTests
         A.CallTo(() => fakeUnitOfWork.CommitAsync()).MustHaveHappened();
     }
     [Fact]
+    public async Task UpdateProduct_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        // Act
+        var result = await ProductEndpointExtensions.UpdateProduct(null, fakeUnitOfWork);
+        // Assert
+        Assert.IsType<BadRequest>(result);
+    }
+    [Fact]
     public async Task DeleteProduct_ShouldDeleteProduct()
     {
         // Arrange
@@ -77,5 +121,15 @@ public class ProductEndpointTests
         // Assert
         A.CallTo(() => fakeUnitOfWork.Products.DeleteAsync(1)).MustHaveHappened();
         A.CallTo(() => fakeUnitOfWork.CommitAsync()).MustHaveHappened();
+    }
+    [Fact]
+    public async Task DeleteProduct_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        // Act
+        var result = await ProductEndpointExtensions.DeleteProduct(fakeUnitOfWork, 0);
+        // Assert
+        Assert.IsType<BadRequest>(result);
     }
 }

@@ -54,5 +54,28 @@ public class UnitOfWorkTests
         _productSubject.Notify(new Product { Id = 1, Name = "test", Description = "test" });
         _observerMock.Verify(o => o.Update(It.IsAny<Product>()), Times.Never);
     }
+    [Fact]
+    public void CommitAsync_CallsSaveChangesOnContext()
+    {
+        // Arrange
+        var dummyContext = new Mock<WebShopDbContext>(new DbContextOptions<WebShopDbContext>());
+        var unitOfWork = new UnitOfWork(dummyContext.Object, _productSubject);
+        // Act
+        unitOfWork.CommitAsync();
+        // Assert
+        dummyContext.Verify(c => c.SaveChanges(), Times.Once);
+
+    }
+    [Fact]
+    public void Dispose_CallsDisposeOnContext()
+    {
+        // Arrange
+        var contextMock = new Mock<WebShopDbContext>(new DbContextOptions<WebShopDbContext>());
+        var unitOfWork = new UnitOfWork(contextMock.Object, _productSubject);
+        // Act
+        unitOfWork.Dispose();
+        // Assert
+        contextMock.Verify(c => c.Dispose(), Times.Once);
+    }
 }
 

@@ -13,18 +13,27 @@ public class OrderEndpointTests
     {
         // Arrange
         var fakeUnitOfWork = A.Fake<IUnitOfWork>();
-        var fakeOrder = new List<Order>
-        {
-            new Order { Id = 1, CustomerId = 1, ShippingDate = DateTime.UtcNow, OrderProducts = new List<OrderProduct>{new (){ProductId = 1, Quantity = 1}}},
-            new Order { Id = 2, CustomerId = 1, ShippingDate = DateTime.UtcNow, OrderProducts = new List<OrderProduct>{new (){ProductId = 2, Quantity = 2}}}
-        };
+        var fakeOrder = A.CollectionOfDummy<Order>(4);
         A.CallTo(() => fakeUnitOfWork.Orders.GetAllAsync()).Returns(Task.FromResult(fakeOrder.AsEnumerable()));
         // Act
         var result = await OrderEndpointExtensions.GetAllOrders(fakeUnitOfWork);
         // Assert
         var okResult = Assert.IsType<Ok<IEnumerable<Order>>>(result);
         var returnValue = Assert.IsAssignableFrom<IEnumerable<Order>>(okResult.Value);
-        Assert.Equal(2, returnValue.Count());
+        Assert.Equal(4, returnValue.Count());
+    }
+    [Fact]
+    public async Task GetAllOrders_ShouldReturnNotFound()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        A.CallTo(() => fakeUnitOfWork.Orders.GetAllAsync()).Returns(Task.FromResult((IEnumerable<Order>)null));
+
+        // Act
+        var result = await OrderEndpointExtensions.GetAllOrders(fakeUnitOfWork);
+
+        // Assert
+        var notOkResult = Assert.IsType<NotFound>(result);
     }
     [Fact]
     public async Task GetOrderById_ShouldReturnOrderById()
@@ -43,6 +52,17 @@ public class OrderEndpointTests
         Assert.Equal(1, returnValue.OrderProducts.Count());
     }
     [Fact]
+    public async Task GetOrderById_ShouldReturnNotFound()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        A.CallTo(() => fakeUnitOfWork.Orders.GetByIdAsync(1)).Returns(Task.FromResult((Order)null));
+        // Act
+        var result = await OrderEndpointExtensions.GetOrderById(fakeUnitOfWork, 1);
+        // Assert
+        var notOkResult = Assert.IsType<NotFound>(result);
+    }
+    [Fact]
     public async Task AddOrder_ShouldAddOrder()
     {
         // Arrange
@@ -56,6 +76,29 @@ public class OrderEndpointTests
         Assert.Equal(1, returnValue.Id);
         Assert.Equal(1, returnValue.CustomerId);
         Assert.Equal(1, returnValue.OrderProducts.Count());
+    }
+    [Fact]
+    public async Task AddOrder_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        var fakeOrder = new Order { Id = 1, CustomerId = 1, ShippingDate = DateTime.UtcNow, OrderProducts = new List<OrderProduct> { new() { ProductId = 1, Quantity = 1 } } };
+        A.CallTo(() => fakeUnitOfWork.Customers.GetByIdAsync(1)).Returns(Task.FromResult((Customer)null));
+        // Act
+        var result = await OrderEndpointExtensions.AddOrder(fakeOrder, fakeUnitOfWork);
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequest>(result);
+    }
+    [Fact]
+    public async Task AddOrder_ShouldReturnBadRequestIfOrderProductsIsNull()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        var fakeOrder = new Order { Id = 1, CustomerId = 1, ShippingDate = DateTime.UtcNow, OrderProducts = null };
+        // Act
+        var result = await OrderEndpointExtensions.AddOrder(fakeOrder, fakeUnitOfWork);
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequest>(result);
     }
     [Fact]
     public async Task UpdateOrder_ShouldUpdateOrder()
@@ -73,6 +116,18 @@ public class OrderEndpointTests
         Assert.Equal(1, returnValue.OrderProducts.Count());
     }
     [Fact]
+    public async Task UpdateOrder_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        var fakeOrder = new Order { Id = 1, CustomerId = 1, ShippingDate = DateTime.UtcNow, OrderProducts = new List<OrderProduct> { new() { ProductId = 1, Quantity = 1 } } };
+        A.CallTo(() => fakeUnitOfWork.Orders.GetByIdAsync(1)).Returns(Task.FromResult((Order)null!));
+        // Act
+        var result = await OrderEndpointExtensions.UpdateOrder(fakeOrder, fakeUnitOfWork);
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequest>(result);
+    }
+    [Fact]
     public async Task DeleteOrder_ShouldDeleteOrder()
     {
        // Arrange
@@ -82,5 +137,16 @@ public class OrderEndpointTests
         // Assert
         A.CallTo(() => fakeUnitOfWork.Orders.DeleteAsync(1)).MustHaveHappened();
         A.CallTo(() => fakeUnitOfWork.CommitAsync()).MustHaveHappened();
+    }
+    [Fact]
+    public async Task DeleteOrder_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var fakeUnitOfWork = A.Fake<IUnitOfWork>();
+        A.CallTo(() => fakeUnitOfWork.Orders.GetByIdAsync(1)).Returns(Task.FromResult((Order)null));
+        // Act
+        var result = await OrderEndpointExtensions.DeleteOrder(fakeUnitOfWork, 1);
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequest>(result);
     }
 }

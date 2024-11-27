@@ -5,7 +5,7 @@ using WebShopSolution.Sql.InterfaceRepos;
 
 namespace WebShop.UnitOfWork
 {
-    // Gränssnitt för Unit of Work
+    
     public interface IUnitOfWork : IDisposable
     {
         IProductRepository Products { get; }

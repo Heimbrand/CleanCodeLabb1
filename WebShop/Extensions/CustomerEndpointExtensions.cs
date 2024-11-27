@@ -46,7 +46,7 @@ public static class CustomerEndpointExtensions
     public static async Task<IResult> AddCustomer([FromBody] Customer customer, [FromServices] IUnitOfWork unitOfWork)
     {
         if (customer is null)
-            return Results.BadRequest("Customer is null");
+            return Results.BadRequest();
         try
         {
             await unitOfWork.Customers.AddAsync(customer);
@@ -60,8 +60,17 @@ public static class CustomerEndpointExtensions
     }
     public static async Task<IResult> UpdateCustomer([FromBody] Customer customer, [FromServices] IUnitOfWork unitOfWork)
     {
+
         if (customer is null)
-            return Results.BadRequest("Customer is null");
+            return Results.BadRequest();
+
+        var existingOrder = await unitOfWork.Customers.GetByIdAsync(customer.Id);
+        if (existingOrder is null)
+            return Results.BadRequest();
+
+
+        if (customer is null)
+            return Results.BadRequest();
         try
         {
             await unitOfWork.Customers.UpdateCustomer(customer);
@@ -75,6 +84,12 @@ public static class CustomerEndpointExtensions
     }
     public static async Task<IResult> DeleteCustomer([FromServices] IUnitOfWork unitOfWork, int id)
     {
+        if (id <= 0)
+            return Results.BadRequest();
+        var customer = await unitOfWork.Customers.GetByIdAsync(id);
+        if (customer is null)
+            return Results.BadRequest();
+
         try
         {
             await unitOfWork.Customers.DeleteAsync(id);

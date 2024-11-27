@@ -48,7 +48,7 @@ public static class ProductEndpointExtensions
     public static async Task<IResult> AddProduct([FromBody] Product product, [FromServices] IUnitOfWork unitOfWork)
     {
         if (product is null)
-            return Results.BadRequest("Product is null");
+            return Results.BadRequest();
 
         try
         {
@@ -66,7 +66,11 @@ public static class ProductEndpointExtensions
     public static async Task<IResult> UpdateProduct([FromBody] Product product, [FromServices] IUnitOfWork unitOfWork)
     {
         if (product is null)
-            return Results.BadRequest("Product is null");
+            return Results.BadRequest();
+
+        var existingOrder = await unitOfWork.Products.GetByIdAsync(product.Id);
+        if (existingOrder is null)
+            return Results.BadRequest();
 
         try
         {
@@ -83,6 +87,11 @@ public static class ProductEndpointExtensions
     }
     public static async Task<IResult> DeleteProduct([FromServices] IUnitOfWork unitOfWork, int id)
     {
+        if (id <= 0)
+            return Results.BadRequest();
+        var product = await unitOfWork.Products.GetByIdAsync(id);
+        if (product is null)
+            return Results.BadRequest();
         try
         {
             await unitOfWork.Products.DeleteAsync(id);
